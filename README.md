@@ -20,7 +20,7 @@ Assembly-number//一个集结了各种资源的的阅读App，命名为“集结
     5，夜间模式切换纯代码解决，没有闪频，且扩展自由。
     
 相应界面如下：
-![](https://github.com/zqljintu/Assembly-number/blob/master/image_about/ji.png)
+![](https://github.com/zqljintu/Assembly-number/blob/master/image_about/ji.jpg)
 
 其中采用了许多优秀的开源库，在此向各位大神致谢。
 
