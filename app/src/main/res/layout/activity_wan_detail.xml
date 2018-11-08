@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/wan_toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/color_feng"
+        app:layout_collapseMode="pin"
+        app:titleTextColor="@color/color_White"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed"/>
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/wan_scroller"
+        android:layout_below="@id/wan_toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <WebView
+            android:id="@+id/wan_detail_webview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:isScrollContainer="false"
+            android:overScrollMode="never" />
+    </android.support.v4.widget.NestedScrollView>
+</RelativeLayout>

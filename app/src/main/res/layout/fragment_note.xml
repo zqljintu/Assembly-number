@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/note_fragement"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/color_Background"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.haibin.calendarview.CalendarLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:default_status="shrink"
+        app:calendar_show_mode="only_week_view"
+        app:calendar_content_view_id="@id/recyclerView_page">
+        <com.haibin.calendarview.CalendarView
+            android:id="@+id/calendarView_note"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:month_view_show_mode="mode_fix"
+            app:select_mode="single_mode"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView_page"
+            android:layout_below="@+id/toolbar_note"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </android.support.v7.widget.RecyclerView>
+    </com.haibin.calendarview.CalendarLayout>
+</RelativeLayout>

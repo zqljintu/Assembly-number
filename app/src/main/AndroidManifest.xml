@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.zql.app_ji">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".Model.UserSeting"
+        android:allowBackup="true"
+        android:debuggable="true"
+        android:icon="@drawable/icon_ji"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/icon_ji"
+        android:supportsRtl="true"
+        android:theme="@style/Zql_Theme_fullScreen"
+        tools:ignore="GoogleAppIndexingWarning,HardcodedDebugMode">
+        <activity android:name=".View.Activitys.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".View.Activitys.ZhihuNoteActivity" />
+        <activity android:name=".View.Activitys.DoubanMovieActivity" />
+        <activity android:name=".View.Activitys.WanDetailActivity" />
+        <activity android:name=".View.Activitys.FavoriteActivity"></activity>
+    </application>
+
+</manifest>

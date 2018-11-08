@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: cn.aigestudio.datepicker:DatePicker-2.2.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/DatePicker-2.2.0.aar/a2b57fb17fcc3d878b3c9cc28b718b15/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/DatePicker-2.2.0.aar/a2b57fb17fcc3d878b3c9cc28b718b15/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/cn.aigestudio.datepicker/DatePicker/2.2.0/af595f557ce944407662fec17d4782bd11bb4189/DatePicker-2.2.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

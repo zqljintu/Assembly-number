@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/favorite_toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/color_feng"
+        app:layout_collapseMode="pin"
+        app:titleTextColor="@color/color_White"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/favorite_recycleView"
+        android:layout_below="@+id/favorite_toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
+</RelativeLayout>

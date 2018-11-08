@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="color_feng">#1DB0B8</color>
+    <color name="color_ya">#37C6C0</color>
+    <color name="color_song">#1CDDB1</color>
+    <color name="color_menu">#A5EAFF</color>
+    <color name="color_movie_rating">#FFE100</color>
+    <color name="color_movie_title">#000000</color>
+    <color name="color_movie_cast">#000A00</color>
+    <color name="color_White">#ffffff</color>
+    <color name="color_Background">#f2f2f2</color>
+    <color name="colorDaymain">#ebebeb</color>
+    <color name="colorDayItem">#ffffff</color>
+    <color name="colorDatText">#1a1a1a</color>
+    <color name="colorNightmain">#000000</color>
+    <color name="colorNightItem">#1a1a1a</color>
+    <color name="colorNightText">#999999</color>
+</resources>
