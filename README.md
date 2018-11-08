@@ -1,6 +1,8 @@
 # Assembly-number
 Assembly-number//一个集结了各种资源的的阅读App，命名为“集结号”！
 
+[下载预览](https://fir.im/zqlsw)
+
 项目简介（适配Android5.0--8.0。）
 ====
 网上有各种各样的免费API,在众里寻找后，最后发现何不将这些API集合在一个App中呢，鉴于个人能力有限，就选取了部分的API来创作。
