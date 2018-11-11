@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.zql.app_ji.Adapter.DoubanActMovieRecyclerAdapter;
@@ -110,8 +111,10 @@ public class DoubanMovieActivity extends AppCompatActivity implements DoubanMovi
 
     @Override
     public void setDetailDoubanMovieonActivity(DetailDoubanMovie detailDoubanMovie) {
-        Glide.with(this).load(detailDoubanMovie.getImages().getMedium()).into(douban_image);
-        Glide.with(this).load(detailDoubanMovie.getImages().getMedium()).asBitmap().into(new SimpleTarget<Bitmap>() {
+        Glide.with(this).load(detailDoubanMovie.getImages().getMedium()) .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE) .into(douban_image);
+        Glide.with(this).load(detailDoubanMovie.getImages().getMedium()).asBitmap() .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE) .into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                 int imagewidth=resource.getWidth();

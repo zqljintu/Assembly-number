@@ -2,6 +2,7 @@ package com.zql.app_ji.View.Fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -78,6 +79,7 @@ public class Code_articleFragment extends BaseFragment implements Code_articleFr
                     Toast.makeText(getContext(), datasBean.getTitle(), Toast.LENGTH_SHORT).show();
                     break;
                 case 1:
+                    shareDialog(datasBean.getLink());
                     break;
                 default:
                     break;
@@ -85,6 +87,12 @@ public class Code_articleFragment extends BaseFragment implements Code_articleFr
             return true;
         }
         return false;
+    }
+    private void shareDialog(String url){//创建分享菜单界面
+        Intent mintent=new Intent(Intent.ACTION_SEND);
+        mintent.setType("text/plain");
+        mintent.putExtra(Intent.EXTRA_TEXT,url);
+        startActivity(mintent);
     }
     private void initView(View view){//实例化view
         datasBeans=new ArrayList<>();

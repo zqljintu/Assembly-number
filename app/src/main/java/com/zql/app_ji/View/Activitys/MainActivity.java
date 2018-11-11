@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.zql.app_ji.Adapter.FragmentsAdapter;
 import com.zql.app_ji.Adapter.MenuRecyclerViewAdapter;
@@ -29,6 +30,9 @@ import com.zql.app_ji.Model.UserSeting;
 import com.zql.app_ji.Prestener.PrestenerMainActivity;
 import com.zql.app_ji.Prestener.PrestenerMainActivityImp;
 import com.zql.app_ji.R;
+import com.zql.app_ji.Util.CleanMessageUtil;
+import com.zql.app_ji.Util.GlideCacheUtil;
+import com.zql.app_ji.Util.LoderCleanUtil;
 import com.zql.app_ji.View.Fragments.CodeFragment;
 import com.zql.app_ji.View.Fragments.HappyFragment;
 import com.zql.app_ji.View.Fragments.MovieFragment;
@@ -207,6 +211,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityImp{
                 default:
                     break;
         }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        CleanMessageUtil.clearAllCache(getApplicationContext());
+        GlideCacheUtil.getInstance().clearImageAllCache(getApplicationContext());
     }
 
     @Override

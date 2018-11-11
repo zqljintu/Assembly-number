@@ -9,6 +9,8 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:longClickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_marginTop="5dp">

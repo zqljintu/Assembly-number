@@ -5,6 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <android.support.v7.widget.CardView
         android:id="@+id/meizi_card"
+        android:longClickable="true"
+        android:clickable="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -17,7 +19,7 @@
                 android:id="@+id/image_meizi_image"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:clickable="true"/>
+                android:src="@drawable/picloader"/>
             <TextView
                 android:id="@+id/text_meizi_time"
                 android:layout_centerHorizontal="true"

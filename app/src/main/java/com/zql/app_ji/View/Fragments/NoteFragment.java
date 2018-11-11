@@ -66,10 +66,11 @@ public class NoteFragment extends BaseFragment implements NoteFragmentImp{
             switch (item.getItemId()){
                 case 0:
                     prestenerNoteFragmentImp.addFavoratetoDataBase(storiesBean);
-                    Toast.makeText(getContext(), "收藏"+storiesBean.getTitle(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "已收藏"+storiesBean.getTitle(), Toast.LENGTH_SHORT).show();
                     break;
                 case 1:
-                    Toast.makeText(getContext(), "分享"+storiesBean.getTitle(), Toast.LENGTH_SHORT).show();
+                    shareDialog(String.valueOf(storiesBean.getId()));
+                   // Toast.makeText(getContext(), "分享"+storiesBean.getTitle(), Toast.LENGTH_SHORT).show();
                     break;
                 default:
                     break;
@@ -78,7 +79,12 @@ public class NoteFragment extends BaseFragment implements NoteFragmentImp{
         }
         return false;
     }
-
+    private void shareDialog(String url){//创建分享菜单界面
+        Intent mintent=new Intent(Intent.ACTION_SEND);
+        mintent.setType("text/plain");
+        mintent.putExtra(Intent.EXTRA_TEXT,"http://daily.zhihu.com/story/"+url);
+        startActivity(mintent);
+    }
     private void initPrestener(){//实现接口
         prestenerNoteFragmentImp=new PrestenerNoteFragment(this);
     }

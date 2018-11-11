@@ -7,6 +7,8 @@
         android:id="@+id/favorite_card"
         android:clickable="true"
         android:longClickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

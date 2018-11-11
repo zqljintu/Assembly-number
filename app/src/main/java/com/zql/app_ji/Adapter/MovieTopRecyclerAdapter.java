@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.zql.app_ji.Bean.DoubanMovie;
@@ -65,7 +66,8 @@ public class MovieTopRecyclerAdapter extends RecyclerView.Adapter<MovieTopRecycl
         holder.text_grade.setText(String.valueOf(doubanmovie_list.get(position).getRating().getAverage()));
         holder.text_acter.setTextColor(interfaceState.getTextcolor());
         holder.text_acter.setText(casts.toString());
-        Glide.with(context).load(doubanmovie_list.get(position).getImages().getSmall()).asBitmap().into(new SimpleTarget<Bitmap>() {
+        Glide.with(context).load(doubanmovie_list.get(position).getImages().getSmall()).asBitmap() .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE) .into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                 int imagewidth=resource.getWidth();

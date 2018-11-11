@@ -3,12 +3,18 @@ package com.zql.app_ji.View.Fragments;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -18,8 +24,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -32,13 +42,27 @@ import com.zql.app_ji.Prestener.PrestenerHappyFragment;
 import com.zql.app_ji.Prestener.PrestenerHappyFragmentImp;
 import com.zql.app_ji.R;
 import com.zql.app_ji.Bean.MessageEventType;
+import com.zql.app_ji.Util.SaveImageUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+import rx.schedulers.Schedulers;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 
 public class HappyFragment extends BaseFragment implements HappyFragmentImp{
     private RecyclerView meizirecyclerView;
@@ -52,11 +76,15 @@ public class HappyFragment extends BaseFragment implements HappyFragmentImp{
     private TextView textView_meizi;
     private  View happyView;
 
+    private Subscriber<File>subscriber;
+    private Observable<File>observable;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.happyView=inflater.inflate(R.layout.fragment_happy,container,false);
         initPrestener();
+        initSubscriber();
         initView(happyView);
         prestenerHappyFragmentImp.setTheStatenightfromSetring();
         meizi_smartRefreshLayout.autoLoadMore();
@@ -67,7 +95,8 @@ public class HappyFragment extends BaseFragment implements HappyFragmentImp{
     public void onLazyLoad() {
 
     }
-
+    private void initSubscriber(){
+    }
 
     private void initPrestener(){//实现代理接口
         prestenerHappyFragmentImp=new PrestenerHappyFragment(this);
@@ -120,6 +149,96 @@ public class HappyFragment extends BaseFragment implements HappyFragmentImp{
                 };
             }
         });
+    }
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getGroupId()==4){
+            GankImage.ResultsBean resultsBean=imageRecyclerAdapter.getLongClickRseult();
+            switch (item.getItemId()){
+                case 0:
+                    saveImagefromurl(resultsBean.getUrl());
+                    break;
+                case 1:
+                    shareDialog(resultsBean.getUrl(),resultsBean.getDesc());
+                    break;
+                default:
+                    break;
+            }
+            return true;
+        }
+        return false;
+    }
+    private void saveImagefromurl(final String url) {
+        Glide.with(getContext())
+                .load(url)
+                .asBitmap()
+                .toBytes()
+                .into(new SimpleTarget<byte[]>() {
+                    @Override
+                    public void onResourceReady(byte[] resource, GlideAnimation<? super byte[]> glideAnimation) {
+                        File pictureFolder=Environment.getExternalStorageDirectory();
+                        File appdir=new File(pictureFolder,"/jiimage");
+                        if (!appdir.exists()){
+                            appdir.mkdir();
+                        }
+                        String filename=System.currentTimeMillis()+".jpg";
+                        File destfile=new File(appdir,filename);
+                        if (SaveImageUtil.copyfile(resource,destfile)){
+                            Toast.makeText(getContext(), "图片保存成功", Toast.LENGTH_SHORT).show();
+                            getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                                    Uri.fromFile(new File(appdir.getAbsoluteFile(),filename))));
+
+                        }else {
+                            Toast.makeText(getContext(), "图片保存失败+n内存", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+                        Toast.makeText(getContext(), "图片保存失败+glide", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void shareDialog(String url,String title) {//创建分享菜单界面
+        Intent intent=new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT,"分享");
+        startActivity(intent);
+        /*Glide.with(getContext())
+                .load(url)
+                .asBitmap()
+                .toBytes()
+                .into(new SimpleTarget<byte[]>() {
+                    @Override
+                    public void onResourceReady(byte[] resource, GlideAnimation<? super byte[]> glideAnimation) {
+                        File pictureFolder=Environment.getExternalStorageDirectory();
+                        File appdir=new File(pictureFolder,"/jishare");
+                        if (!appdir.exists()){
+                            appdir.mkdir();
+                        }
+                        String filename=System.currentTimeMillis()+".jpg";
+                        File destfile=new File(appdir,filename);
+                        if (SaveImageUtil.copyfile(resource,destfile)){
+                            Toast.makeText(getContext(), "图片保存成功", Toast.LENGTH_SHORT).show();
+                            getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                                    Uri.fromFile(new File(appdir.getAbsoluteFile(),filename))));
+                            Intent mintent=new Intent(Intent.ACTION_SEND);
+                            mintent.putExtra(Intent.EXTRA_STREAM,Uri.fromFile(new File(appdir.getAbsoluteFile(),filename)));
+                            mintent.setType("image/*");
+                            startActivity(mintent);
+                        }else {
+                            Toast.makeText(getContext(), "图片分享失败+内存", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+                        Toast.makeText(getContext(), "图片分享失败+glide", Toast.LENGTH_SHORT).show();
+                    }
+                });*/
     }
     /**
      * 直接设置夜间

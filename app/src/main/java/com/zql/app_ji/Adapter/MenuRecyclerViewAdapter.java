@@ -2,6 +2,7 @@ package com.zql.app_ji.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,12 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.balysv.materialripple.MaterialRippleLayout;
 import com.zql.app_ji.Bean.InterfaceState;
 import com.zql.app_ji.Prestener.PrestenerMainActivityImp;
 import com.zql.app_ji.R;
 import com.zql.app_ji.View.Activitys.FavoriteActivity;
 
 import java.util.List;
+
+import me.majiajie.pagerbottomtabstrip.internal.MaterialItemLayout;
 
 public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<MenuRecyclerViewAdapter.Viewholder>{
     private List<String>menus;

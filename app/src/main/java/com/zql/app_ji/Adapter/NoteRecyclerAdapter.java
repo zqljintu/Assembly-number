@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.zql.app_ji.Bean.InterfaceState;
 import com.zql.app_ji.Bean.ZhihuNote;
 import com.zql.app_ji.Prestener.PrestenerNoteFragmentImp;
@@ -50,7 +51,8 @@ public class NoteRecyclerAdapter extends RecyclerView.Adapter<NoteRecyclerAdapte
         holder.mText0.setText(list_zhihu_storiesbean.get(position).getTitle());
         startContextMenu(holder.cardView,position);
         startZhihunoteActivity(holder.cardView,list_zhihu_storiesbean.get(position).getId(),list_zhihu_storiesbean.get(position).getTitle());
-        Glide.with(mContex).load(list_zhihu_storiesbean.get(position).getImages().get(0)).into(holder.mImView);
+        Glide.with(mContex).load(list_zhihu_storiesbean.get(position).getImages().get(0)) .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE) .into(holder.mImView);
     }
 
     @Override

@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.zql.app_ji.Bean.DetailZhihuNote;
 import com.zql.app_ji.Bean.Entity.ZhihuEntity;
 import com.zql.app_ji.Bean.InterfaceState;
@@ -102,7 +103,8 @@ public class ZhihuNoteActivity extends AppCompatActivity implements ZhihuNoteAct
         coordinatorLayout.setBackgroundColor(interfaceState.getBackgroundcolor());
         zhihu_toolbar.setBackgroundColor(interfaceState.getPagecolor());
         zhihu_webview.setBackgroundColor(interfaceState.getBackgroundcolor());
-        Glide.with(this).load(detailZhihuNote.getImage()).into(zhihu_bar_image);
+        Glide.with(this).load(detailZhihuNote.getImage()) .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE) .into(zhihu_bar_image);
         zhihu_bar_title.setText(detailZhihuNote.getTitle());
         zhihu_bar_copyright.setText(detailZhihuNote.getImage_source());
         String htmldata=HtmlUtil.createHtmlData(detailZhihuNote.getBody(),detailZhihuNote.getCss(),detailZhihuNote.getJs(),interfaceState.isNight());

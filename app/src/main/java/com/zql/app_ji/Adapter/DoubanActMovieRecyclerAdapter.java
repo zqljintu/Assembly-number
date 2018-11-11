@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.zql.app_ji.Bean.DetailDoubanMovie;
@@ -39,7 +40,8 @@ public class DoubanActMovieRecyclerAdapter extends RecyclerView.Adapter<DoubanAc
     @Override
     public void onBindViewHolder(final Viewholder holder, int position) {
         InterfaceState interfaceState=prestenerMovieFragmentImp.getActivityInterfacefromUserting();
-        Glide.with(context).load(list_doubanact.get(position).getAvatars().getMedium()).into(holder.douban_act_image);
+        Glide.with(context).load(list_doubanact.get(position).getAvatars().getMedium()) .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE) .into(holder.douban_act_image);
         holder.douban_act_name.setTextColor(interfaceState.getTextcolor());
         holder.douban_act_name.setText(list_doubanact.get(position).getName());
     }

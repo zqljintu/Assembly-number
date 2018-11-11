@@ -3,6 +3,7 @@ package com.zql.app_ji.View.Fragments;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -74,9 +75,10 @@ public class Movie_intheatersFragment extends BaseFragment implements Movie_inth
             switch (item.getItemId()){
                 case 0:
                     prestenerMovieFragmentImp.addFavoritetoDataBase(subjectsBean);
-                    Toast.makeText(getContext(), subjectsBean.getTitle(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "已收藏"+subjectsBean.getTitle(), Toast.LENGTH_SHORT).show();
                     break;
                 case 1:
+                    shareDialog(subjectsBean.getId());
                     break;
                 default:
                     break;
@@ -84,6 +86,12 @@ public class Movie_intheatersFragment extends BaseFragment implements Movie_inth
             return true;
         }
         return false;
+    }
+    private void shareDialog(String url){//创建分享菜单界面
+        Intent mintent=new Intent(Intent.ACTION_SEND);
+        mintent.setType("text/plain");
+        mintent.putExtra(Intent.EXTRA_TEXT,"http://m.douban.com/movie/subject/"+url+"/mobile");
+        startActivity(mintent);
     }
 
     /**

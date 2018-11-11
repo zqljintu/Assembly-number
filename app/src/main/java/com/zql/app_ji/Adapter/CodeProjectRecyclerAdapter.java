@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.zql.app_ji.Bean.InterfaceState;
@@ -54,7 +55,8 @@ public class CodeProjectRecyclerAdapter extends RecyclerView.Adapter<CodeProject
         holder.title_project.setText(list_project.get(position).getTitle());
         holder.dec_project.setText(list_project.get(position).getDesc());
         holder.dec_project.setTextColor(interfaceState.getTextcolor());
-        Glide.with(context).load(list_project.get(position).getEnvelopePic()).asBitmap().into(new SimpleTarget<Bitmap>() {
+        Glide.with(context).load(list_project.get(position).getEnvelopePic()).asBitmap() .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE) .into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                 int imagewidth=resource.getWidth();
@@ -98,7 +100,7 @@ public class CodeProjectRecyclerAdapter extends RecyclerView.Adapter<CodeProject
         @Override
         public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
             contextMenu.add(21,0,ContextMenu.NONE,"收藏");
-            contextMenu.add(21,1,contextMenu.NONE,"分享");
+            contextMenu.add(21,1,ContextMenu.NONE,"分享");
         }
     }
     /**

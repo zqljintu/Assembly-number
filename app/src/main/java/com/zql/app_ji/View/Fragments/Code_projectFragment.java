@@ -3,6 +3,7 @@ package com.zql.app_ji.View.Fragments;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -79,6 +80,7 @@ public class Code_projectFragment extends BaseFragment implements Code_projectFr
                     Toast.makeText(getContext(), datasBean.getTitle(), Toast.LENGTH_SHORT).show();
                     break;
                 case 1:
+                    shareDialog(datasBean.getLink());
                     break;
                 default:
                     break;
@@ -87,7 +89,12 @@ public class Code_projectFragment extends BaseFragment implements Code_projectFr
         }
         return false;
     }
-
+    private void shareDialog(String url){//创建分享菜单界面
+        Intent mintent=new Intent(Intent.ACTION_SEND);
+        mintent.setType("text/plain");
+        mintent.putExtra(Intent.EXTRA_TEXT,url);
+        startActivity(mintent);
+    }
     private void initView(View view){
         projects=new ArrayList<>();
         codeprojectrecyclerview=(RecyclerView)view.findViewById(R.id.recyclerview_codeproject);
