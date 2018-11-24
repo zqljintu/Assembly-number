@@ -3,6 +3,9 @@ Assembly-number//一个集结了各种资源的的阅读App，命名为“集结
 
 [下载预览](https://fir.im/zqlsw)
 
+集结号的Vue版本，预览请点击 
+[集结号（vue版本）](https://github.com/zqljintu/Assembly-number_Vue)
+
 项目简介（适配Android5.0--8.0。）
 ====
 网上有各种各样的免费API,在众里寻找后，最后发现何不将这些API集合在一个App中呢，鉴于个人能力有限，就选取了部分的API来创作。
