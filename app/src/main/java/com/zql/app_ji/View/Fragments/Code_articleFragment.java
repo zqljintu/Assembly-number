@@ -17,9 +17,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.zql.app_ji.Adapter.CodeArticleRecyclerAdapter;
 import com.zql.app_ji.Bean.Entity.WanEntity;
 import com.zql.app_ji.Bean.InterfaceState;
@@ -45,9 +48,9 @@ public class Code_articleFragment extends BaseFragment implements Code_articleFr
     private CodeArticleRecyclerAdapter codeArticleRecyclerAdapter;
     private PrestenerCodeFragmentImp prestenerCodeFragmentImp;
     private SmartRefreshLayout smartRefreshLayout;
-    private Handler mhander;
-    private List<WanArticle.DataBean.DatasBean>datasBeans;
-    private WanArticle wanArticle;
+    private Handler mhander,dhander;
+    private List<WanArticle.DataBean.DatasBean>datasBeans=new ArrayList<>();
+    private WanArticle wanArticle=new WanArticle();
     private View articleview;
 
     @Nullable
@@ -57,7 +60,7 @@ public class Code_articleFragment extends BaseFragment implements Code_articleFr
         initprestener();
         initView(articleview);
         prestenerCodeFragmentImp.setNightstateBackgroundtoArticle();
-        smartRefreshLayout.autoLoadMore();
+        smartRefreshLayout.autoRefresh();
         return articleview;
     }
 
@@ -95,8 +98,6 @@ public class Code_articleFragment extends BaseFragment implements Code_articleFr
         startActivity(mintent);
     }
     private void initView(View view){//实例化view
-        datasBeans=new ArrayList<>();
-        wanArticle=new WanArticle();
         recyclerView_codeArticle=(RecyclerView)view.findViewById(R.id.recyclerview_codeaticle);
         layoutManager=new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
         codeArticleRecyclerAdapter=new CodeArticleRecyclerAdapter(datasBeans,getContext(),prestenerCodeFragmentImp);
@@ -109,11 +110,31 @@ public class Code_articleFragment extends BaseFragment implements Code_articleFr
             }
         });
         smartRefreshLayout=(SmartRefreshLayout)view.findViewById(R.id.smartfresh_code_artticle);
+        smartRefreshLayout.setRefreshHeader(new MaterialHeader(getContext()).setColorSchemeColors(getResources().getColor(R.color.colorAccent),getResources().getColor(R.color.color_song)));
+        smartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @SuppressLint("HandlerLeak")
+            @Override
+            public void onRefresh(@NonNull final RefreshLayout refreshLayout) {
+                prestenerCodeFragmentImp.getWanArticlefromWanAPI(0,0);
+                dhander=new Handler(){
+                    @Override
+                    public void handleMessage(Message msg) {
+                        switch (msg.what){
+                            case MessageEventType.MOVIE_UP_REFECH_DATE:
+                                refreshLayout.finishRefresh();
+                                datasBeans.clear();
+                                datasBeans.addAll(wanArticle.getData().getDatas());
+                                codeArticleRecyclerAdapter.notifyDataSetChanged();
+                        }
+                    }
+                };
+            }
+        });
         smartRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @SuppressLint("HandlerLeak")
             @Override
             public void onLoadMore(@NonNull final RefreshLayout refreshLayout) {
-                prestenerCodeFragmentImp.getWanArticlefromWanAPI(codeArticleRecyclerAdapter.getItemCount()/20);
+                prestenerCodeFragmentImp.getWanArticlefromWanAPI(codeArticleRecyclerAdapter.getItemCount()/20,1);
                 mhander=new Handler(){
                     @Override
                     public void handleMessage(Message msg) {
@@ -155,9 +176,18 @@ public class Code_articleFragment extends BaseFragment implements Code_articleFr
         }
     }
     @Override
-    public void setWanAricleOnRecyclerView(WanArticle wanArticle) {
+    public void setWanAricleOnRecyclerView(WanArticle wanArticle,int type) {
         this.wanArticle=wanArticle;
-        mhander.sendEmptyMessage(MessageEventType.MOVIE_DOWN_REFECH_DATE);
+        switch (type){
+            case 0:
+                dhander.sendEmptyMessage(MessageEventType.MOVIE_UP_REFECH_DATE);
+                break;
+            case 1:
+                mhander.sendEmptyMessage(MessageEventType.MOVIE_DOWN_REFECH_DATE);
+                break;
+                default:
+                    break;
+        }
     }
 
     @Override

@@ -26,7 +26,7 @@ import com.zql.app_ji.R;
 
 import java.util.List;
 
-public class FavoriteActivity extends AppCompatActivity implements FavoriteActivityImp {
+public class FavoriteActivity extends SwipeActivity implements FavoriteActivityImp {
     private Toolbar favorite_toolbar;
     private RecyclerView favorite_recyclerView;
     private RecyclerView.LayoutManager layoutManager;
@@ -39,6 +39,7 @@ public class FavoriteActivity extends AppCompatActivity implements FavoriteActiv
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
+        setSwipeAnyWhere(true);
         Intent mintent=getIntent();
         int type=mintent.getIntExtra("type",0);
         initPrestener();

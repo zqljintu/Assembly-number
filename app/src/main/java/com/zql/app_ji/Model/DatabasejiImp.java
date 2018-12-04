@@ -19,4 +19,5 @@ public interface DatabasejiImp {
     public void deleteFavoriteMoviefromDB(Long id);//删除某项
     public void deleteFavoriteZhihufromDB(Long id);//删除某项
     public void deleteFavoriteWanfromDB(Long id);//删除某项
+    public List<Integer> queryAllMenuSum();//加载是数据库中的收藏数量
 }

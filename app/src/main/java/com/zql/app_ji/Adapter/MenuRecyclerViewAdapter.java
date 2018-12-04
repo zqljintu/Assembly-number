@@ -22,11 +22,13 @@ import me.majiajie.pagerbottomtabstrip.internal.MaterialItemLayout;
 
 public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<MenuRecyclerViewAdapter.Viewholder>{
     private List<String>menus;
+    private List<Integer>menusum;
     private Context context;
     private PrestenerMainActivityImp prestenerMainActivityImp;
 
-    public MenuRecyclerViewAdapter(Context mcontext,List<String>list,PrestenerMainActivityImp prestenerMainActivityImp){
+    public MenuRecyclerViewAdapter(Context mcontext,List<String>list,List<Integer>list_sum,PrestenerMainActivityImp prestenerMainActivityImp){
         this.menus=list;
+        this.menusum=list_sum;
         this.context=mcontext;
         this.prestenerMainActivityImp=prestenerMainActivityImp;
     }
@@ -41,9 +43,11 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<MenuRecyclerVi
     @Override
     public void onBindViewHolder(Viewholder holder, int position) {
         InterfaceState interfaceState=prestenerMainActivityImp.getIntegerfacefromUserseting();
-        holder.textView_menytitle.setTextColor(interfaceState.getTextcolor());
+        holder.textView_menutitle.setTextColor(interfaceState.getTextcolor());
         holder.cardView_menu.setBackgroundColor(interfaceState.getItemcolor());
-        holder.textView_menytitle.setText(menus.get(position));
+        holder.textView_sum.setTextColor(interfaceState.getTextcolor());
+        holder.textView_menutitle.setText(menus.get(position));
+        holder.textView_sum.setText(getMenuSum(menusum.get(position)));
         startActivity(holder.cardView_menu,position);
     }
 
@@ -54,15 +58,12 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<MenuRecyclerVi
 
     public class Viewholder extends RecyclerView.ViewHolder{
         CardView cardView_menu;
-        TextView textView_menytitle;
-
+        TextView textView_menutitle,textView_sum;
         public Viewholder(View view){
             super(view);
-           // InterfaceState interfaceState=prestenerMainActivityImp.getIntegerfacefromUserseting();
             cardView_menu=(CardView)view.findViewById(R.id.main_card);
-            textView_menytitle=(TextView)view.findViewById(R.id.main_title_menu);
-            //cardView_menu.setBackgroundColor(interfaceState.getItemcolor());
-            //textView_menytitle.setTextColor(interfaceState.getTextcolor());
+            textView_menutitle=(TextView)view.findViewById(R.id.main_title_menu);
+            textView_sum=(TextView)view.findViewById(R.id.main_menu_sum);
         }
     }
     /**
@@ -78,5 +79,9 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<MenuRecyclerVi
                 prestenerMainActivityImp.showDrawerLayoutfromAdapter();
             }
         });
+    }
+
+    private String getMenuSum(int sum){
+        return sum>99?"99+":String.valueOf(sum);
     }
 }

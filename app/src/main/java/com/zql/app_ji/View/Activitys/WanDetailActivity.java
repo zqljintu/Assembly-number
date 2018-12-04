@@ -31,7 +31,7 @@ import retrofit2.http.HTTP;
 
 import static android.text.Html.FROM_HTML_MODE_LEGACY;
 
-public class WanDetailActivity extends AppCompatActivity implements WanDetailActivityImp{
+public class WanDetailActivity extends SwipeActivity implements WanDetailActivityImp{
     private WebView wan_webview;
     private Toolbar wan_toolbar;
     private NestedScrollView wan_nestedScrollView;
@@ -46,6 +46,7 @@ public class WanDetailActivity extends AppCompatActivity implements WanDetailAct
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wan_detail);
+        setSwipeAnyWhere(true);
         Intent mintent=getIntent();
         String url=mintent.getStringExtra("url");
         String title=mintent.getStringExtra("title");

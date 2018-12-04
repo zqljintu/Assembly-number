@@ -5,13 +5,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE">
-    </uses-permission>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="andorid.permission.MONUN_UNMOUNT_FILESYSTEMS"/>
-
-
-
 
     <application
         android:name=".Model.UserSeting"
@@ -26,14 +22,24 @@
         <activity android:name=".View.Activitys.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".View.Activitys.ZhihuNoteActivity" />
-        <activity android:name=".View.Activitys.DoubanMovieActivity" />
-        <activity android:name=".View.Activitys.WanDetailActivity" />
-        <activity android:name=".View.Activitys.FavoriteActivity"></activity>
+        <activity android:name=".View.Activitys.ZhihuNoteActivity"
+            android:theme="@style/Zql_theme_Transparent"/>
+        <activity android:name=".View.Activitys.DoubanMovieActivity"
+            android:theme="@style/Zql_theme_Transparent"/>
+        <activity android:name=".View.Activitys.WanDetailActivity"
+            android:theme="@style/Zql_theme_Transparent"/>
+        <activity android:name=".View.Activitys.FavoriteActivity"
+            android:theme="@style/Zql_theme_Transparent">
+        </activity>
+        <receiver android:name=".Broadcast.NetworkStateRecevier">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"></action>
+                <category android:name="android.intent.category.DEFAULT"></category>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

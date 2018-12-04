@@ -120,9 +120,9 @@ public class Movie_intheatersFragment extends BaseFragment implements Movie_inth
     private void initView(View view){
         subjectsBeans=new  ArrayList<>();
         doubanMovie=new DoubanMovie();
-        //prestenerMovieFragmentImp.getDoubanMoviefromDoubanAPI();
         recyclerView_movie=(RecyclerView)view.findViewById(R.id.recyclerView_movie_intheater);
         layoutManager=new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+        ((StaggeredGridLayoutManager) layoutManager).setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         movieRecyclerAdapter = new MovieRecyclerAdapter(subjectsBeans,getContext(),prestenerMovieFragmentImp);
         recyclerView_movie.setLayoutManager(layoutManager);
         recyclerView_movie.setAdapter(movieRecyclerAdapter);
@@ -130,6 +130,7 @@ public class Movie_intheatersFragment extends BaseFragment implements Movie_inth
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                ((StaggeredGridLayoutManager) layoutManager).invalidateSpanAssignments();
             }
         });
         refreshLayout=(RefreshLayout)view.findViewById(R.id.smartfresh_movie_intheater);

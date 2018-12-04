@@ -2,6 +2,7 @@ package com.zql.app_ji.Model;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v7.widget.LinearSmoothScroller;
 
 import com.zql.app_ji.Bean.Entity.MovieEntity;
 import com.zql.app_ji.Bean.Entity.WanEntity;
@@ -14,6 +15,7 @@ import com.zql.app_ji.Model.greendao.db.ZhihuEntityDao;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseJi implements DatabasejiImp {
@@ -134,5 +136,17 @@ public class DatabaseJi implements DatabasejiImp {
     @Override
     public void deleteFavoriteWanfromDB(Long id) {
         wanEntityDao.deleteByKey(id);
+    }
+    /**
+     * 获取收藏的数量
+     */
+    @Override
+    public List<Integer> queryAllMenuSum() {
+        List<Integer>list=new ArrayList<>();
+        list.add(zhihuEntityDao.loadAll().size());
+        list.add(movieEntityDao.loadAll().size());
+        list.add(wanEntityDao.loadAll().size());
+        list.add(0);
+        return list;
     }
 }

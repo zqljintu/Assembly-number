@@ -22,6 +22,7 @@ public class PrestenerCodeFragment implements PrestenerCodeFragmentImp{
     private GetWanAndroidgsonModelImp getWanAndroidgsonModelImp;
     private WanDetailActivityImp wanDetailActivityImp;
     private DatabasejiImp databasejiImp;
+    private int type,type_project;
 
     public PrestenerCodeFragment(CodeFragmentImp codeFragmentImp){
         this.codeFragmentImp=codeFragmentImp;
@@ -48,13 +49,14 @@ public class PrestenerCodeFragment implements PrestenerCodeFragmentImp{
      * @param page
      */
     @Override
-    public void getWanArticlefromWanAPI(int page) {
+    public void getWanArticlefromWanAPI(int page,int type) {
         getWanAndroidgsonModelImp.getArticlesfromWanAPI(page);
+        this.type=type;
     }
 
     @Override
     public void setWanArticleonArticleRecyclerView(WanArticle wanArticle) {
-        code_articleFragmentImp.setWanAricleOnRecyclerView(wanArticle);
+        code_articleFragmentImp.setWanAricleOnRecyclerView(wanArticle,this.type);
     }
 
     @Override
@@ -75,13 +77,14 @@ public class PrestenerCodeFragment implements PrestenerCodeFragmentImp{
      */
 
     @Override
-    public void getWanProjectfromWanAPI(int page) {
+    public void getWanProjectfromWanAPI(int page,int type) {
         getWanAndroidgsonModelImp.getProjectsfromWanAPI(page);
+        this.type_project=type;
     }
 
     @Override
     public void setWanProjectonArticleRecyclerView(WanProject wanProject) {
-        code_projectFragmentImp.setWanProjectsOnRecyclerview(wanProject);
+        code_projectFragmentImp.setWanProjectsOnRecyclerview(wanProject,this.type_project);
     }
 
     @Override

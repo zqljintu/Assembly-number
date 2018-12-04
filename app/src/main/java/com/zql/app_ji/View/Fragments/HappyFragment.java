@@ -14,7 +14,6 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -30,9 +29,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
+import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.zql.app_ji.Adapter.ImageRecyclerAdapter;
 import com.zql.app_ji.Bean.GankImage;
 import com.zql.app_ji.Bean.InterfaceState;
@@ -43,6 +44,7 @@ import com.zql.app_ji.Prestener.PrestenerHappyFragmentImp;
 import com.zql.app_ji.R;
 import com.zql.app_ji.Bean.MessageEventType;
 import com.zql.app_ji.Util.SaveImageUtil;
+import com.zql.app_ji.View.Viewabout.StaggeredDividerItemDecoration;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -70,14 +72,12 @@ public class HappyFragment extends BaseFragment implements HappyFragmentImp{
     private ImageRecyclerAdapter imageRecyclerAdapter;
     private PrestenerHappyFragmentImp prestenerHappyFragmentImp;
     private SmartRefreshLayout meizi_smartRefreshLayout;
-    private GankImage gankImage;
-    private List<GankImage.ResultsBean>gankImages;
-    private Handler mhander;
+    private GankImage gankImage=new GankImage();
+    private List<GankImage.ResultsBean>gankImages=new ArrayList<>();
+    private Handler mhander,dhander;
     private TextView textView_meizi;
-    private  View happyView;
+    private View happyView;
 
-    private Subscriber<File>subscriber;
-    private Observable<File>observable;
 
     @Nullable
     @Override
@@ -87,7 +87,7 @@ public class HappyFragment extends BaseFragment implements HappyFragmentImp{
         initSubscriber();
         initView(happyView);
         prestenerHappyFragmentImp.setTheStatenightfromSetring();
-        meizi_smartRefreshLayout.autoLoadMore();
+        meizi_smartRefreshLayout.autoRefresh();
         return happyView;
     }
 
@@ -97,24 +97,25 @@ public class HappyFragment extends BaseFragment implements HappyFragmentImp{
     }
     private void initSubscriber(){
     }
-
     private void initPrestener(){//实现代理接口
         prestenerHappyFragmentImp=new PrestenerHappyFragment(this);
     }
     private void initView(View view){//实例化界面
-        gankImages=new ArrayList<>();
         textView_meizi=(TextView)view.findViewById(R.id.text_meizi);
         textView_meizi.setVisibility(View.INVISIBLE);
         meizirecyclerView=(RecyclerView)view.findViewById(R.id.recyclerView_meizi);
         layoutManager=new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+        ((StaggeredGridLayoutManager) layoutManager).setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         textView_meizi=(TextView)view.findViewById(R.id.text_meizi);
         imageRecyclerAdapter=new ImageRecyclerAdapter(gankImages,getContext(),prestenerHappyFragmentImp);
+        meizirecyclerView.addItemDecoration(new StaggeredDividerItemDecoration(getContext(),0));
         meizirecyclerView.setLayoutManager(layoutManager);
         meizirecyclerView.setAdapter(imageRecyclerAdapter);
         meizirecyclerView.setOnScrollListener(new OnVerticalScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                ((StaggeredGridLayoutManager) layoutManager).invalidateSpanAssignments();
             }
 
             @Override
@@ -130,11 +131,32 @@ public class HappyFragment extends BaseFragment implements HappyFragmentImp{
             }
         });
         meizi_smartRefreshLayout=(SmartRefreshLayout)view.findViewById(R.id.smartfresh_meizi);
+        meizi_smartRefreshLayout.setRefreshHeader(new MaterialHeader(getContext()).setColorSchemeColors(getResources().getColor(R.color.colorAccent),getResources().getColor(R.color.color_song)));
+        meizi_smartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @SuppressLint("HandlerLeak")
+            @Override
+            public void onRefresh(@NonNull final RefreshLayout refreshLayout) {
+                prestenerHappyFragmentImp.getGankImagefromGankAPI(0,0);//获取更多照片，+1表示页数。
+                dhander=new Handler(){
+                    @Override
+                    public void handleMessage(Message msg) {
+                        switch (msg.what){
+                            case MessageEventType.MOVIE_UP_REFECH_DATE:
+                                refreshLayout.finishRefresh();
+                                gankImages.clear();
+                                gankImages.addAll(gankImage.getResults());
+                                imageRecyclerAdapter.notifyDataSetChanged();
+                                break;
+                        }
+                    }
+                };
+            }
+        });
         meizi_smartRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @SuppressLint("HandlerLeak")
             @Override
             public void onLoadMore(@NonNull final RefreshLayout refreshLayout) {
-                prestenerHappyFragmentImp.getGankImagefromGankAPI(imageRecyclerAdapter.getItemCount()/20+1);//获取更多照片，+1表示页数。
+                prestenerHappyFragmentImp.getGankImagefromGankAPI(imageRecyclerAdapter.getItemCount()/20+1,1);//获取更多照片，+1表示页数。
                 mhander=new Handler(){
                     @Override
                     public void handleMessage(Message msg) {
@@ -278,9 +300,18 @@ public class HappyFragment extends BaseFragment implements HappyFragmentImp{
     }
 
     @Override
-    public void setGankImagesOnRecyclerView(GankImage mgankImage) {
+    public void setGankImagesOnRecyclerView(GankImage mgankImage,int type) {
         this.gankImage=mgankImage;
-        mhander.sendEmptyMessage(MessageEventType.MOVIE_DOWN_REFECH_DATE);
+        switch (type){
+            case 0:
+                dhander.sendEmptyMessage(MessageEventType.MOVIE_UP_REFECH_DATE);
+                break;
+            case 1:
+                mhander.sendEmptyMessage(MessageEventType.MOVIE_DOWN_REFECH_DATE);
+                break;
+                default:
+                    break;
+        }
     }
 
     @Override

@@ -17,5 +17,16 @@
             android:overScrollMode="never"
             android:scrollbars="vertical">
         </android.support.v7.widget.RecyclerView>
+        <TextView
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:background="@color/transparent"
+            android:textAlignment="center"
+            android:padding="10dp"
+            android:textSize="18sp"
+            android:textColor="@color/color_feng"
+            android:text="没有更多了^v^!!"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 </android.support.constraint.ConstraintLayout>

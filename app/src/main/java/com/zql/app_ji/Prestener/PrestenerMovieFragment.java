@@ -21,6 +21,7 @@ public class PrestenerMovieFragment implements PrestenerMovieFragmentImp {
     private DoubanMovieActivityImp doubanMovieActivityImp;
     private MovieFragmentImp movieFragmentImp;
     private DatabasejiImp databasejiImp;
+    private int type;
 
     public PrestenerMovieFragment(MovieFragmentImp movieFragmentImp){
         this.movieFragmentImp=movieFragmentImp;
@@ -88,7 +89,8 @@ public class PrestenerMovieFragment implements PrestenerMovieFragmentImp {
     }
 
     @Override
-    public void getMoreDoubantopMoviefromDoubanAPI(int start, int count) {
+    public void getMoreDoubantopMoviefromDoubanAPI(int start, int count,int type) {
+        this.type=type;
         if (movie_topFragmentImp!=null){
             getDoubangsonModelImp.getMoreMovie_top_fromDoubanAPI(start,count);
         }
@@ -97,7 +99,7 @@ public class PrestenerMovieFragment implements PrestenerMovieFragmentImp {
     @Override
     public void setDoubantopMovietoRecyclerView(DoubanMovie doubanMovie) {
         if (movie_topFragmentImp!=null){
-            movie_topFragmentImp.setRecyclerItemonPagefromDouban(doubanMovie);
+            movie_topFragmentImp.setRecyclerItemonPagefromDouban(doubanMovie,type);
         }
     }
 

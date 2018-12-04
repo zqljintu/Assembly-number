@@ -36,7 +36,7 @@ import java.util.List;
 import me.next.tagview.TagCloudView;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
-public class DoubanMovieActivity extends AppCompatActivity implements DoubanMovieActivityImp{
+public class DoubanMovieActivity extends SwipeActivity implements DoubanMovieActivityImp{
     private PrestenerMovieFragmentImp prestenerMovieFragmentImp;
     private ImageView douban_image,douban_movie_image;
     private Toolbar douban_toolbar;
@@ -51,6 +51,8 @@ public class DoubanMovieActivity extends AppCompatActivity implements DoubanMovi
         super.onCreate(savedInstanceState);
         Intent mintent=getIntent();
         setContentView(R.layout.activity_douban_movie);
+
+
         initPrestener();
         initView();
         prestenerMovieFragmentImp.getDetailDoubanMoviefromDoubanAPI(mintent.getStringExtra("id"));

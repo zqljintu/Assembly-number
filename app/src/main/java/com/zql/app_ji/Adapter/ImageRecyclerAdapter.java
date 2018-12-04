@@ -54,8 +54,7 @@ public class ImageRecyclerAdapter extends RecyclerView.Adapter<ImageRecyclerAdap
         holder.meizi_text.setText(meiziimage_list.get(position).getDesc());
         holder.cardView.setBackgroundColor(interfaceState.getItemcolor());
         openViewOnDialog(holder.cardView,meiziimage_list.get(position).getUrl());
-        Glide.with(context).load(meiziimage_list.get(position).getUrl()).asBitmap() .skipMemoryCache(true)
-                .diskCacheStrategy(DiskCacheStrategy.NONE) .into(new SimpleTarget<Bitmap>() {
+        Glide.with(context).load(meiziimage_list.get(position).getUrl()).asBitmap() .into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                 int imagewidth=resource.getWidth();

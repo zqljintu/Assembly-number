@@ -21,6 +21,8 @@ import android.widget.Toast;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.zql.app_ji.Adapter.MovieTopRecyclerAdapter;
 import com.zql.app_ji.Bean.DoubanMovie;
@@ -31,6 +33,7 @@ import com.zql.app_ji.Prestener.PrestenerMovieFragment;
 import com.zql.app_ji.Prestener.PrestenerMovieFragmentImp;
 import com.zql.app_ji.R;
 import com.zql.app_ji.Bean.MessageEventType;
+import com.zql.app_ji.View.Viewabout.StaggeredDividerItemDecoration;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -46,7 +49,7 @@ public class Movie_topFragment extends BaseFragment implements Movie_topFragment
     private RecyclerView.LayoutManager layoutManager;
     private DoubanMovie doubanMovie;
     private List<DoubanMovie.SubjectsBean> subjectsBeans;
-    private Handler mhander;
+    private Handler mhander,dhander;
     private SmartRefreshLayout smartRefreshLayout_top;
     private View movieview;
 
@@ -58,7 +61,7 @@ public class Movie_topFragment extends BaseFragment implements Movie_topFragment
         initPrester();
         initView(movieview);
         prestenerMovieFragmentImp.setNightStateBackgroundtoTop();
-        smartRefreshLayout_top.autoLoadMore();
+        smartRefreshLayout_top.autoRefresh();
         return movieview;
     }
 
@@ -98,6 +101,7 @@ public class Movie_topFragment extends BaseFragment implements Movie_topFragment
         doubanMovie=new DoubanMovie();
         recyclerView_movie_top=(RecyclerView)view.findViewById(R.id.recyclerview_movie_top);
         layoutManager=new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+        ((StaggeredGridLayoutManager) layoutManager).setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         movie_top_RecyclerAdapter=new MovieTopRecyclerAdapter(getContext(),subjectsBeans,prestenerMovieFragmentImp);
         recyclerView_movie_top.setLayoutManager(layoutManager);
         recyclerView_movie_top.setAdapter(movie_top_RecyclerAdapter);
@@ -105,15 +109,35 @@ public class Movie_topFragment extends BaseFragment implements Movie_topFragment
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                ((StaggeredGridLayoutManager) layoutManager).invalidateSpanAssignments();
             }
         });
         smartRefreshLayout_top=(SmartRefreshLayout)view.findViewById(R.id.smartfresh_movie_top);
         smartRefreshLayout_top.setRefreshHeader(new MaterialHeader(getContext()).setColorSchemeColors(getResources().getColor(R.color.colorAccent),getResources().getColor(R.color.color_song)));
-        smartRefreshLayout_top.setOnLoadMoreListener(new OnRefreshLoadMoreListener() {
+        smartRefreshLayout_top.setOnRefreshListener(new OnRefreshListener() {
+            @SuppressLint("HandlerLeak")
+            @Override
+            public void onRefresh(@NonNull final RefreshLayout refreshLayout) {
+                prestenerMovieFragmentImp.getMoreDoubantopMoviefromDoubanAPI(0,25,0);
+                dhander=new Handler(){
+                    @Override
+                    public void handleMessage(Message msg) {
+                        switch (msg.what){
+                            case MessageEventType.MOVIE_UP_REFECH_DATE:
+                                refreshLayout.finishRefresh();
+                                subjectsBeans.clear();
+                                subjectsBeans.addAll(doubanMovie.getSubjects());
+                                movie_top_RecyclerAdapter.notifyDataSetChanged();
+                        }
+                    }
+                };
+            }
+        });
+        smartRefreshLayout_top.setOnLoadMoreListener(new OnLoadMoreListener() {
             @SuppressLint("HandlerLeak")
             @Override
             public void onLoadMore(@NonNull final RefreshLayout refreshLayout) {
-                prestenerMovieFragmentImp.getMoreDoubantopMoviefromDoubanAPI(movie_top_RecyclerAdapter.getItemCount(),25);
+                prestenerMovieFragmentImp.getMoreDoubantopMoviefromDoubanAPI(movie_top_RecyclerAdapter.getItemCount(),25,1);
                 mhander=new Handler(){
                     @Override
                     public void handleMessage(Message msg) {
@@ -121,24 +145,6 @@ public class Movie_topFragment extends BaseFragment implements Movie_topFragment
                             case MessageEventType.MOVIE_DOWN_REFECH_DATE:
                                 refreshLayout.finishLoadMore();
                                 subjectsBeans.addAll(movie_top_RecyclerAdapter.getItemCount(),doubanMovie.getSubjects());
-                                movie_top_RecyclerAdapter.notifyDataSetChanged();
-                        }
-                    }
-                };
-            }
-
-            @SuppressLint("HandlerLeak")
-            @Override
-            public void onRefresh(@NonNull final RefreshLayout refreshLayout) {
-                prestenerMovieFragmentImp.getMoreDoubantopMoviefromDoubanAPI(movie_top_RecyclerAdapter.getItemCount(),25);
-                mhander=new Handler(){
-                    @Override
-                    public void handleMessage(Message msg) {
-                        switch (msg.what){
-                            case MessageEventType.MOVIE_DOWN_REFECH_DATE:
-                                refreshLayout.finishLoadMore();
-                                subjectsBeans.clear();
-                                subjectsBeans.addAll(doubanMovie.getSubjects());
                                 movie_top_RecyclerAdapter.notifyDataSetChanged();
                         }
                     }
@@ -174,9 +180,18 @@ public class Movie_topFragment extends BaseFragment implements Movie_topFragment
     }
 
     @Override
-    public void setRecyclerItemonPagefromDouban(DoubanMovie mdoubanMovie) {
+    public void setRecyclerItemonPagefromDouban(DoubanMovie mdoubanMovie,int type) {
         this.doubanMovie=mdoubanMovie;
-        mhander.sendEmptyMessage(MessageEventType.MOVIE_DOWN_REFECH_DATE);
+        switch (type){
+            case 0:
+                dhander.sendEmptyMessage(MessageEventType.MOVIE_UP_REFECH_DATE);
+                break;
+            case 1:
+                mhander.sendEmptyMessage(MessageEventType.MOVIE_DOWN_REFECH_DATE);
+                break;
+                default:
+                    break;
+        }
     }
 
     @Override

@@ -23,6 +23,22 @@
             android:layout_marginLeft="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+        <RelativeLayout
+            android:background="@drawable/menu_sum_background"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp">
+            <TextView
+                android:id="@+id/main_menu_sum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="99+"
+                android:textSize="13sp"/>
+        </RelativeLayout>
         <ImageView
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"

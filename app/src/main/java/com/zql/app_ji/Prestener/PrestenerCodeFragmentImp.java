@@ -6,10 +6,10 @@ import com.zql.app_ji.Bean.WanArticle;
 import com.zql.app_ji.Bean.WanProject;
 
 public interface PrestenerCodeFragmentImp {
-    public void getWanArticlefromWanAPI(int page);//从玩Android后台获取最新博文数据
+    public void getWanArticlefromWanAPI(int page,int type);//从玩Android后台获取最新博文数据
     public void setWanArticleonArticleRecyclerView(WanArticle wanArticle);//将最新博文数据加载到recyclerview上
     public void setErrorMessageOnArticleFragment(int ErrorMessage);//将错误信息加载到fragment上
-    public void getWanProjectfromWanAPI(int page);//从玩Android后台获取最新项目数据
+    public void getWanProjectfromWanAPI(int page,int type);//从玩Android后台获取最新项目数据
     public void setWanProjectonArticleRecyclerView(WanProject wanProject);//将最新项目数据加载到recyclerview上
     public void setErrorMessageOnProjectFragment(int ErrorMessage);//将错误信息加载到fragment上
     public void addFavoritetoDatabase(WanEntity wanEntity);//加载到数据库

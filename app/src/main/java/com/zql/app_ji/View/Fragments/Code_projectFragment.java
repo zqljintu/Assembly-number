@@ -18,9 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.zql.app_ji.Adapter.CodeProjectRecyclerAdapter;
 import com.zql.app_ji.Bean.Entity.WanEntity;
 import com.zql.app_ji.Bean.InterfaceState;
@@ -45,10 +47,9 @@ public class Code_projectFragment extends BaseFragment implements Code_projectFr
     private RecyclerView.LayoutManager layoutManager;
     private PrestenerCodeFragmentImp prestenerCodeFragmentImp;
     private SmartRefreshLayout project_smartRefreshLayout;
-    private List<WanProject.DataBean.DatasBean>projects;
-    private WanProject wanProject;
-    private Handler mhander;
-    private boolean isRefresh=false;//判断是刷新还是加载
+    private List<WanProject.DataBean.DatasBean>projects=new ArrayList<>();
+    private WanProject wanProject=new WanProject();
+    private Handler mhander,dhander;
     private View codeview;
 
     @Nullable
@@ -58,7 +59,7 @@ public class Code_projectFragment extends BaseFragment implements Code_projectFr
         initPrestener();
         initView(codeview);
         prestenerCodeFragmentImp.setNightstateBackgroundtoProject();
-        project_smartRefreshLayout.autoLoadMore();
+        project_smartRefreshLayout.autoRefresh();
         return codeview;
     }
 
@@ -96,7 +97,6 @@ public class Code_projectFragment extends BaseFragment implements Code_projectFr
         startActivity(mintent);
     }
     private void initView(View view){
-        projects=new ArrayList<>();
         codeprojectrecyclerview=(RecyclerView)view.findViewById(R.id.recyclerview_codeproject);
         layoutManager=new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
         codeProjectRecyclerAdapter=new CodeProjectRecyclerAdapter(projects,getContext(),prestenerCodeFragmentImp);
@@ -109,50 +109,31 @@ public class Code_projectFragment extends BaseFragment implements Code_projectFr
             }
         });
         project_smartRefreshLayout=(SmartRefreshLayout)view.findViewById(R.id.smartfresh_code_project);
-       /* project_smartRefreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
-            @SuppressLint("HandlerLeak")
-            @Override
-            public void onLoadMore(@NonNull final RefreshLayout refreshLayout) {
-                prestenerCodeFragmentImp.getWanProjectfromWanAPI(codeProjectRecyclerAdapter.getItemCount()/20);
-                isRefresh=false;
-                mhander=new Handler(){
-                    @Override
-                    public void handleMessage(Message msg) {
-                        switch (msg.what){
-                            case MessageEventType.MOVIE_DOWN_REFECH_DATE:
-                                refreshLayout.finishLoadMore();
-                                projects.addAll(codeProjectRecyclerAdapter.getItemCount(),wanProject.getData().getDatas());
-                                codeProjectRecyclerAdapter.notifyDataSetChanged();
-                        }
-                    }
-                };
-            }
-
+        project_smartRefreshLayout.setRefreshHeader(new MaterialHeader(getContext()).setColorSchemeColors(getResources().getColor(R.color.colorAccent),getResources().getColor(R.color.color_song)));
+        project_smartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @SuppressLint("HandlerLeak")
             @Override
             public void onRefresh(@NonNull final RefreshLayout refreshLayout) {
-                 prestenerCodeFragmentImp.getWanProjectfromWanAPI(0);
-                isRefresh=true;
-                mhander=new Handler(){
+                prestenerCodeFragmentImp.getWanProjectfromWanAPI(0,0);
+                dhander=new Handler(){
                     @Override
                     public void handleMessage(Message msg) {
                         switch (msg.what){
-                            case MessageEventType.MOVIE_DOWN_REFECH_DATE:
+                            case MessageEventType.MOVIE_UP_REFECH_DATE:
                                 refreshLayout.finishRefresh();
                                 projects.clear();
-                                projects=wanProject.getData().getDatas();
+                                projects.addAll(wanProject.getData().getDatas());
                                 codeProjectRecyclerAdapter.notifyDataSetChanged();
                         }
                     }
                 };
             }
-        });*/
+        });
         project_smartRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @SuppressLint("HandlerLeak")
             @Override
             public void onLoadMore(@NonNull final RefreshLayout refreshLayout) {
-                prestenerCodeFragmentImp.getWanProjectfromWanAPI(codeProjectRecyclerAdapter.getItemCount()/20);
-                isRefresh=false;
+                prestenerCodeFragmentImp.getWanProjectfromWanAPI(codeProjectRecyclerAdapter.getItemCount()/20,1);
                 mhander=new Handler(){
                     @Override
                     public void handleMessage(Message msg) {
@@ -160,7 +141,7 @@ public class Code_projectFragment extends BaseFragment implements Code_projectFr
                             case MessageEventType.MOVIE_DOWN_REFECH_DATE:
                                 refreshLayout.finishLoadMore();
                                 projects.addAll(codeProjectRecyclerAdapter.getItemCount(),wanProject.getData().getDatas());
-                                codeProjectRecyclerAdapter.notifyDataSetChanged();
+                                codeProjectRecyclerAdapter.notifyItemRangeInserted(codeProjectRecyclerAdapter.getItemCount(),wanProject.getData().getDatas().size());
                         }
                     }
                 };
@@ -194,9 +175,18 @@ public class Code_projectFragment extends BaseFragment implements Code_projectFr
 
 
     @Override
-    public void setWanProjectsOnRecyclerview(WanProject wanProject) {
+    public void setWanProjectsOnRecyclerview(WanProject wanProject,int type) {
         this.wanProject=wanProject;
-        mhander.sendEmptyMessage(MessageEventType.MOVIE_DOWN_REFECH_DATE);
+        switch (type){
+            case 0:
+                dhander.sendEmptyMessage(MessageEventType.MOVIE_UP_REFECH_DATE);
+                break;
+            case 1:
+                mhander.sendEmptyMessage(MessageEventType.MOVIE_DOWN_REFECH_DATE);
+                break;
+                default:
+                    break;
+        }
     }
 
     @Override

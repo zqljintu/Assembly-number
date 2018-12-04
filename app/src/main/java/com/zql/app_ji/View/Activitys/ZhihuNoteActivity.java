@@ -29,7 +29,7 @@ import com.zql.app_ji.Prestener.PrestenerNoteFragmentImp;
 import com.zql.app_ji.R;
 import com.zql.app_ji.Util.HtmlUtil;
 
-public class ZhihuNoteActivity extends AppCompatActivity implements ZhihuNoteActivityImp {
+public class ZhihuNoteActivity extends SwipeActivity implements ZhihuNoteActivityImp {
     private ImageView zhihu_bar_image;
     private TextView zhihu_bar_title,zhihu_bar_copyright,zhihu_title;
     private Toolbar zhihu_toolbar;
@@ -46,6 +46,7 @@ public class ZhihuNoteActivity extends AppCompatActivity implements ZhihuNoteAct
         Intent mintent=getIntent();
         int note_id=mintent.getIntExtra("id" ,102708);
         setContentView(R.layout.activity_zhihu_note);
+        setSwipeAnyWhere(true);
         initprestener();
         initViw();
         prestenerNoteFragmentImp.getDetailZhihuNotefromZhihuAPI(mintent.getIntExtra("id",102708));

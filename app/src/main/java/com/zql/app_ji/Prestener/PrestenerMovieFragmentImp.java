@@ -11,7 +11,7 @@ public interface PrestenerMovieFragmentImp {
     public void getDoubantopMoviefromDoubanAPI();//fragment获取豆瓣上的数据(Top界面)
     public void setDoubantopMovietoRecyclerView(DoubanMovie doubanMovie);//Modul获取完数据后加载到Fragment;（Top界面）
     public void setErrorMessageOntopFragment();//显示错误信息（top界面）
-    public void getMoreDoubantopMoviefromDoubanAPI(int start,int count);//获取更多的top电影条目
+    public void getMoreDoubantopMoviefromDoubanAPI(int start,int count,int type);//获取更多的top电影条目
     public void getDetailDoubanMoviefromDoubanAPI(String id);//从豆瓣API获取数据
     public void setDetailDoubanMovietoActivity(DetailDoubanMovie detailDoubanMovie);//获取电影详情到activity
     public void addFavoritetoDataBase(DoubanMovie.SubjectsBean subjectsBean);//收藏到数据库

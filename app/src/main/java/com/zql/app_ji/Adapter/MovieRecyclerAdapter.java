@@ -42,6 +42,11 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieRecyclerAdap
         this.index=position;
     }
 
+    public int getContentSize(){
+        return doubanmovie_list.size();
+    }
+
+
 
     public MovieRecyclerAdapter(List<DoubanMovie.SubjectsBean>mlist, Context mcontext,PrestenerMovieFragmentImp prestenerMovieFragmentImp){
         this.doubanmovie_list=mlist;
@@ -51,9 +56,9 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieRecyclerAdap
 
     @Override
     public Viewholder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View item=LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie,parent,false);
-        Viewholder viewholder=new Viewholder(item);
-        return viewholder;
+            View item=LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie,parent,false);
+            Viewholder viewholder=new Viewholder(item);
+            return viewholder;
     }
 
     @Override

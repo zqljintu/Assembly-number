@@ -9,20 +9,21 @@ import com.zql.app_ji.View.Fragments.HappyFragmentImp;
 public class PrestenerHappyFragment implements PrestenerHappyFragmentImp {
     private HappyFragmentImp happyFragmentImp;
     private GetGankgsonModel getGankgsonModel;
+    private int type;
     public PrestenerHappyFragment(HappyFragmentImp happyFragmentImp){
         this.happyFragmentImp=happyFragmentImp;
         getGankgsonModel=new GetGankgsonModel(this);
     }
 
     @Override
-    public void getGankImagefromGankAPI(int page) {
+    public void getGankImagefromGankAPI(int page,int type) {
        getGankgsonModel.getGankImagesfremGankAPI(page);
-        //getGankgsonModel.getTestGank();
+       this.type=type;
     }
 
     @Override
     public void setGankImagesOnRecyclerView(GankImage gankImage) {
-        happyFragmentImp.setGankImagesOnRecyclerView(gankImage);
+        happyFragmentImp.setGankImagesOnRecyclerView(gankImage,this.type);
     }
 
     @Override

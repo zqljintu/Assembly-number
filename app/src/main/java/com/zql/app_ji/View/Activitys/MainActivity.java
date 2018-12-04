@@ -1,7 +1,11 @@
 package com.zql.app_ji.View.Activitys;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -19,6 +23,7 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.kyleduo.switchbutton.SwitchButton;
@@ -59,15 +64,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityImp{
     private MenuRecyclerViewAdapter menuRecyclerViewAdapter;
     private SwitchButton switchButton_night;
     private UserSeting userSeting;
-
-
     private PrestenerMainActivity prestenerMainActivityImp;//MainActivity的代理接口
+    private List<Integer>listsum=new ArrayList<>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userSeting=(UserSeting)getApplication();
         setContentView(R.layout.activity_main);
         initPrestener();
+        prestenerMainActivityImp.showDrawerMenuandSum();
         initview();
         prestenerMainActivityImp.setTheNightStatefromUserseting();
         EventBus.getDefault().register(this);
@@ -95,6 +102,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityImp{
     }
 
     /**
+     * 设置侧滑菜单并获取数据
+     */
+    @Override
+    public void setDrawerMenusandSum(List<Integer>listsum) {
+        this.listsum.clear();
+        this.listsum.addAll(listsum);
+    }
+
+    /**
      * 实例化fragment和vieepager并且和NavigationView联系起来
      */
     private void initFragmentsViewandViewpagerView(){
@@ -118,15 +134,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityImp{
         list.add("电影");
         list.add("开发");
         list.add("娱乐");
-        drawerLayout_main=(DrawerLayout)findViewById(R.id.drawerlayout_main);
         recyclerView_menu=(RecyclerView)findViewById(R.id.recyclerview_main_menu);
-        menuRecyclerViewAdapter=new MenuRecyclerViewAdapter(this,list,prestenerMainActivityImp);
+        menuRecyclerViewAdapter=new MenuRecyclerViewAdapter(this,list,listsum,prestenerMainActivityImp);
         RecyclerView.LayoutManager manager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerView_menu.setAdapter(menuRecyclerViewAdapter);
         recyclerView_menu.setLayoutManager(manager);
-
         switchButton_night=(SwitchButton)findViewById(R.id.main_switchbutton_background);
         switchButton_night.setChecked(userSeting.getNightState());
+        drawerLayout_main=(DrawerLayout)findViewById(R.id.drawerlayout_main);
         switchButton_night.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -147,7 +162,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityImp{
 
             @Override
             public void onDrawerOpened(View drawerView) {
-
+                prestenerMainActivityImp.showDrawerMenuandSum();
+                menuRecyclerViewAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -174,6 +190,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityImp{
     @Override
     public Application getBaseapplication() {
         return getApplication();
+    }
+
+    @Override
+    public Context getbasecontext() {
+        return getBaseContext();
     }
 
     /**
