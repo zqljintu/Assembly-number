@@ -29,6 +29,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -190,7 +191,9 @@ public class HappyFragment extends BaseFragment implements HappyFragmentImp{
         }
         return false;
     }
-    private void saveImagefromurl(final String url) {
+
+    @Override
+    public void saveImagefromurl(final String url) {
         Glide.with(getContext())
                 .load(url)
                 .asBitmap()
@@ -293,9 +296,10 @@ public class HappyFragment extends BaseFragment implements HappyFragmentImp{
         AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
         LayoutInflater layoutInflater=LayoutInflater.from(getContext());
         View centerview=layoutInflater.inflate(R.layout.dialog_meizi,null);
-        final ImageView dialogimageView=(ImageView)centerview.findViewById(R.id.dialog_meizi_image);
+        //final ImageView dialogimageView=(ImageView)centerview.findViewById(R.id.dialog_meizi_image);
+        final PhotoView photoView=(PhotoView)centerview.findViewById(R.id.dialog_meizi_photoview);
         final AlertDialog alertDialog=builder.setView(centerview).create();
-        Glide.with(getContext()).load(url).into(dialogimageView);
+        Glide.with(getContext()).load(url).into(photoView);
         alertDialog.show();
     }
 

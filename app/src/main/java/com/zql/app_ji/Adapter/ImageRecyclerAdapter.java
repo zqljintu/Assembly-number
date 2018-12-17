@@ -1,5 +1,6 @@
 package com.zql.app_ji.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.app.AlertDialog;
@@ -7,6 +8,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.zql.app_ji.Bean.GankImage;
 import com.zql.app_ji.Bean.InterfaceState;
 import com.zql.app_ji.Prestener.PrestenerHappyFragment;
@@ -106,13 +109,55 @@ public class ImageRecyclerAdapter extends RecyclerView.Adapter<ImageRecyclerAdap
             }
         });
     }
-    private void openImageviewOnDialog(String url) {
+    @SuppressLint("ClickableViewAccessibility")
+    private void openImageviewOnDialog(final String url) {
         AlertDialog.Builder builder=new AlertDialog.Builder(context);
         LayoutInflater layoutInflater=LayoutInflater.from(context);
         View centerview=layoutInflater.inflate(R.layout.dialog_meizi,null);
-        final ImageView dialogimageView=(ImageView)centerview.findViewById(R.id.dialog_meizi_image);
+       // final ImageView dialogimageView=(ImageView)centerview.findViewById(R.id.dialog_meizi_image);
+        final PhotoView photoView=(PhotoView)centerview.findViewById(R.id.dialog_meizi_photoview);
+        final ImageView image_download=(ImageView)centerview.findViewById(R.id.dialog_meizi_download);
+        final ImageView image_close=(ImageView)centerview.findViewById(R.id.dialog_meizi_close);
         final AlertDialog alertDialog=builder.setView(centerview).create();
-        Glide.with(context).load(url).into(dialogimageView);
+        Glide.with(context).load(url).into(photoView);
+        image_download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prestenerHappyFragmentImp.downImagetophone(url);
+            }
+        });
+        image_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+       /* photoView.setOnTouchListener(new View.OnTouchListener() {
+            float pos_x,pos_y,m_x,m_y;
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        pos_x=event.getX();
+                        pos_y=event.getY();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        m_x=event.getX();
+                        m_y=event.getY();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (m_y-pos_y>0&&(Math.abs(m_y-pos_y)>25)){
+                            alertDialog.dismiss();
+                        }else if (m_y-pos_y<0&&(Math.abs(m_y-pos_y)>25)){
+                            alertDialog.dismiss();
+                        }
+                        break;
+                        default:
+                            break;
+                }
+                return true;
+            }
+        });*/
         alertDialog.show();
     }
     private void startContextMenu(View view,final int id){

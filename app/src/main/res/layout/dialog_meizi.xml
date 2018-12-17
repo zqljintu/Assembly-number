@@ -2,9 +2,38 @@
 <RelativeLayout android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <ImageView
+   <!-- <ImageView
         android:id="@+id/dialog_meizi_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"/>
+        android:gravity="center"/>-->
+    <com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/dialog_meizi_photoview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorNightItem" />
+    <ImageView
+        android:id="@+id/dialog_meizi_download"
+        android:clickable="true"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/download"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="20dp"
+        android:layout_above="@+id/dialog_meizi_bottom"/>
+    <ImageView
+        android:id="@+id/dialog_meizi_close"
+        android:clickable="true"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/close"
+        android:layout_alignParentRight="true"
+        android:layout_margin="20dp"
+        android:layout_above="@+id/dialog_meizi_bottom"/>
+    <ImageView
+        android:id="@+id/dialog_meizi_bottom"
+        android:background="@color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/dialog_meizi_photoview"/>
 </RelativeLayout>

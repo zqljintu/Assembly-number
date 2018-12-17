@@ -9,5 +9,6 @@ public interface PrestenerHappyFragmentImp {
     public void setErrorMessageOnFragment();//将错误信息显示到Fragment上
     public void openImagetoDialog(String url);//打开图片到dialog
     public void setTheStatenightfromSetring();//设置夜间模式
-    public InterfaceState getIntegerfacefromSeting();//获取
+    public InterfaceState getIntegerfacefromSeting();//获取背景色
+    public void downImagetophone(String url);
 }

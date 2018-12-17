@@ -63,6 +63,7 @@ public class FavoriteWanRecyclerAdapter extends RecyclerView.Adapter<FavoriteWan
             super(view);
             titletext=(TextView)view.findViewById(R.id.favorite_title_text);
             cardView=(CardView)view.findViewById(R.id.favorite_card);
+            view.setOnCreateContextMenuListener(this);
         }
 
         @Override

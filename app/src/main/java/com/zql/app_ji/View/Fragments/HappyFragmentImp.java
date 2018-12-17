@@ -14,4 +14,5 @@ public interface HappyFragmentImp {
     public void setTheNightstateonFragment(InterfaceState interfaceState);//设置夜间模式
     public Context getbasecontext();
     public Application getbaseapplication();
+    public void saveImagefromurl(String url);
 }

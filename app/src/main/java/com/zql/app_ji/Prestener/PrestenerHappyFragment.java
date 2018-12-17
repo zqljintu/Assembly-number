@@ -47,4 +47,9 @@ public class PrestenerHappyFragment implements PrestenerHappyFragmentImp {
         UserSeting userSeting=(UserSeting)happyFragmentImp.getbaseapplication();
         return userSeting.getInterfaceState();
     }
+
+    @Override
+    public void downImagetophone(String url) {
+        happyFragmentImp.saveImagefromurl(url);
+    }
 }
