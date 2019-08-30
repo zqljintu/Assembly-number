@@ -16,7 +16,7 @@ import rx.schedulers.Schedulers;
 
 public class GetDoubangsonModel implements GetDoubangsonModelImp{
     private PrestenerMovieFragmentImp prestenerMovieFragmentImp;
-    private String baseUrl="http://api.douban.com";
+    private String baseUrl="https://douban.uieee.com";
     private GetDoubanMovie getDoubanMovie;
     public GetDoubangsonModel(PrestenerMovieFragmentImp mprestenerMovieFragmentImp){
         this.prestenerMovieFragmentImp=mprestenerMovieFragmentImp;
