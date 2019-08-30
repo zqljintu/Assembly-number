@@ -5,6 +5,7 @@ import com.zql.app_ji.Bean.DoubanMovie;
 import com.zql.app_ji.Prestener.PrestenerCodeFragment;
 import com.zql.app_ji.Prestener.PrestenerMovieFragmentImp;
 import com.zql.app_ji.Service.GetDoubanMovie;
+import com.zql.app_ji.Service.RetrofitManager;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -22,11 +23,7 @@ public class GetDoubangsonModel implements GetDoubangsonModelImp{
 
     @Override
     public void getMoviefromDoubanAPI() {
-        Retrofit retrofit=new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
+        Retrofit retrofit= RetrofitManager.getInstance(baseUrl).getmRetrofit();
         GetDoubanMovie getDoubanMovie=retrofit.create(GetDoubanMovie.class);
         getDoubanMovie.getDoubanMovies()
                 .observeOn(AndroidSchedulers.mainThread())

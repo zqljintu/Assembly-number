@@ -4,6 +4,7 @@ import com.zql.app_ji.Bean.WanArticle;
 import com.zql.app_ji.Bean.WanProject;
 import com.zql.app_ji.Prestener.PrestenerCodeFragmentImp;
 import com.zql.app_ji.Service.GetWanAndroid;
+import com.zql.app_ji.Service.RetrofitManager;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -22,11 +23,7 @@ public class GetWanAndroidgsonModel implements GetWanAndroidgsonModelImp{
 
     @Override
     public void getArticlesfromWanAPI(int page) {
-        Retrofit retrofit=new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
+        Retrofit retrofit= RetrofitManager.getInstance(baseUrl).getmRetrofit();
         GetWanAndroid getWanAndroid=retrofit.create(GetWanAndroid.class);
         getWanAndroid.getWanArticle(String.valueOf(page))
                 .observeOn(AndroidSchedulers.mainThread())

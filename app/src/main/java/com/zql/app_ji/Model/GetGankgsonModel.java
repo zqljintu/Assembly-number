@@ -3,6 +3,7 @@ package com.zql.app_ji.Model;
 import com.zql.app_ji.Bean.GankImage;
 import com.zql.app_ji.Prestener.PrestenerHappyFragmentImp;
 import com.zql.app_ji.Service.GetGankImage;
+import com.zql.app_ji.Service.RetrofitManager;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -21,11 +22,7 @@ public class GetGankgsonModel implements GetGankgsonModelImp{
 
     @Override
     public void getGankImagesfremGankAPI(int page) {
-        Retrofit retrofit=new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
+        Retrofit retrofit= RetrofitManager.getInstance(baseUrl).getmRetrofit();
         GetGankImage getGankImage=retrofit.create(GetGankImage.class);
         getGankImage.getGankImages(String.valueOf(page))
                 .observeOn(AndroidSchedulers.mainThread())

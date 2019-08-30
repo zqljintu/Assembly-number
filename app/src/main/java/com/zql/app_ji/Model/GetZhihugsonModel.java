@@ -6,6 +6,7 @@ import com.zql.app_ji.Bean.ZhihuNote;
 import com.zql.app_ji.Prestener.PrestenerNoteFragment;
 import com.zql.app_ji.Prestener.PrestenerNoteFragmentImp;
 import com.zql.app_ji.Service.GetZhihuNote;
+import com.zql.app_ji.Service.RetrofitManager;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -17,9 +18,13 @@ import rx.schedulers.Schedulers;
 public class GetZhihugsonModel implements GetZhihugsonModelImp {
     private String baseUrl="http://news-at.zhihu.com";
     private PrestenerNoteFragmentImp prestenerNoteFragmentImp;
+    private GetZhihuNote getZhihuNote;
 
     public GetZhihugsonModel(PrestenerNoteFragment mprestenerNoteFragmentImp){
         this.prestenerNoteFragmentImp=mprestenerNoteFragmentImp;
+        this.getZhihuNote = RetrofitManager.getInstance(baseUrl)
+                .getmRetrofit()
+                .create(GetZhihuNote.class);
     }
 
     /**
@@ -28,12 +33,6 @@ public class GetZhihugsonModel implements GetZhihugsonModelImp {
      */
     @Override
     public void getZhihuNotefromZhihuAPI() {
-        Retrofit retrofit=new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-        GetZhihuNote getZhihuNote=retrofit.create(GetZhihuNote.class);
         getZhihuNote.getZhihuNotes()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -75,12 +74,6 @@ public class GetZhihugsonModel implements GetZhihugsonModelImp {
 
     @Override
     public void getBeforeDateZhihuNotefromZhihuAPI(String beforedate) {
-        Retrofit retrofit=new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-        GetZhihuNote getZhihuNote=retrofit.create(GetZhihuNote.class);
         getZhihuNote.getDateZhihuNotes(beforedate)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -104,12 +97,6 @@ public class GetZhihugsonModel implements GetZhihugsonModelImp {
 
     @Override
     public void getDetailZhihuNotefromZhihuAPI(int id) {
-        Retrofit retrofit=new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-        GetZhihuNote getZhihuNote=retrofit.create(GetZhihuNote.class);
         getZhihuNote.getDetailZhhuNote(String.valueOf(id))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
