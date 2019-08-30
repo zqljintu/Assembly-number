@@ -16,15 +16,20 @@ import rx.schedulers.Schedulers;
 public class GetWanAndroidgsonModel implements GetWanAndroidgsonModelImp{
     public PrestenerCodeFragmentImp prestenerCodeFragmentImp;
     String baseUrl="http://www.wanandroid.com";
+    private GetWanAndroid getWanAndroid;
 
     public GetWanAndroidgsonModel(PrestenerCodeFragmentImp mprestenerCodeFragmentImp){
         this.prestenerCodeFragmentImp=mprestenerCodeFragmentImp;
+        Retrofit retrofit=new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+        this.getWanAndroid=retrofit.create(GetWanAndroid.class);
     }
 
     @Override
     public void getArticlesfromWanAPI(int page) {
-        Retrofit retrofit= RetrofitManager.getInstance(baseUrl).getmRetrofit();
-        GetWanAndroid getWanAndroid=retrofit.create(GetWanAndroid.class);
         getWanAndroid.getWanArticle(String.valueOf(page))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -48,12 +53,6 @@ public class GetWanAndroidgsonModel implements GetWanAndroidgsonModelImp{
 
     @Override
     public void getProjectsfromWanAPI(int page) {
-        Retrofit retrofit=new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-        GetWanAndroid getWanAndroid=retrofit.create(GetWanAndroid.class);
         getWanAndroid.getWanProject(String.valueOf(page))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

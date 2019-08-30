@@ -17,14 +17,19 @@ import rx.schedulers.Schedulers;
 public class GetDoubangsonModel implements GetDoubangsonModelImp{
     private PrestenerMovieFragmentImp prestenerMovieFragmentImp;
     private String baseUrl="http://api.douban.com";
+    private GetDoubanMovie getDoubanMovie;
     public GetDoubangsonModel(PrestenerMovieFragmentImp mprestenerMovieFragmentImp){
         this.prestenerMovieFragmentImp=mprestenerMovieFragmentImp;
+        Retrofit retrofit=new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+        this.getDoubanMovie=retrofit.create(GetDoubanMovie.class);
     }
 
     @Override
     public void getMoviefromDoubanAPI() {
-        Retrofit retrofit= RetrofitManager.getInstance(baseUrl).getmRetrofit();
-        GetDoubanMovie getDoubanMovie=retrofit.create(GetDoubanMovie.class);
         getDoubanMovie.getDoubanMovies()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -48,12 +53,6 @@ public class GetDoubangsonModel implements GetDoubangsonModelImp{
 
     @Override
     public void getMovie_top_fromDoubanAPI() {
-        Retrofit retrofit=new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-        GetDoubanMovie getDoubanMovie=retrofit.create(GetDoubanMovie.class);
         getDoubanMovie.getTopDoubanMovies()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

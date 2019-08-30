@@ -15,15 +15,20 @@ import rx.schedulers.Schedulers;
 public class GetGankgsonModel implements GetGankgsonModelImp{
     private PrestenerHappyFragmentImp prestenerHappyFragmentImp;
     private String baseUrl="http://gank.io";
+    private GetGankImage getGankImage;
 
     public GetGankgsonModel(PrestenerHappyFragmentImp mprestenerHappyFragmentImp){
         this.prestenerHappyFragmentImp=mprestenerHappyFragmentImp;
+        Retrofit retrofit=new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+        this.getGankImage=retrofit.create(GetGankImage.class);
     }
 
     @Override
     public void getGankImagesfremGankAPI(int page) {
-        Retrofit retrofit= RetrofitManager.getInstance(baseUrl).getmRetrofit();
-        GetGankImage getGankImage=retrofit.create(GetGankImage.class);
         getGankImage.getGankImages(String.valueOf(page))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -47,12 +52,6 @@ public class GetGankgsonModel implements GetGankgsonModelImp{
 
     @Override
     public void getTestGank() {
-        Retrofit retrofit=new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-        GetGankImage getGankImage=retrofit.create(GetGankImage.class);
         getGankImage.getTestGank()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
